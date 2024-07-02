@@ -1,6 +1,7 @@
 # Creación de Portafolio Personal en AWS
 
 Este proyecto describe la configuración de un portafolio personal utilizando varios servicios de AWS. La infraestructura incluye los siguientes componentes: S3, CloudFront, Route 53, Certificados SSL, DynamoDB, API Gateway y Lambda.
+![IMAGE PORTAFOLIOS](https://github.com/jpiedramacas/my-portafolios/blob/main/TEMPLATE.png )
 
 ## Servicios de AWS Utilizados
 
