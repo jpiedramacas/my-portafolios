@@ -1,6 +1,3 @@
-# Instrucciones para Configurar un Portafolio Personal en AWS Usando Free Tier
-
-Estas instrucciones te guiarán a través de los pasos necesarios para configurar un portafolio personal utilizando los servicios gratuitos de AWS. Asegúrate de que tu cuenta de AWS esté configurada y que tengas acceso a la consola de AWS.
 
 ## Paso 1: Configurar Amazon S3 (Simple Storage Service)
 
