@@ -6,7 +6,7 @@ Este proyecto describe la configuración de un portafolio personal utilizando va
 
 ## Servicios de AWS Utilizados
 
-### 1. Amazon S3 (Simple Storage Service)
+### 1. `Amazon S3 (Simple Storage Service)`
 Amazon S3 se utiliza para el almacenamiento de los archivos estáticos del portafolio, como HTML, CSS, JavaScript e imágenes. S3 proporciona una solución de almacenamiento escalable y segura.
 
 **Características clave:**
