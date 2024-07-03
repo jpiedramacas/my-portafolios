@@ -1,6 +1,7 @@
 # Creación de Portafolio Personal en AWS
 
 Este proyecto describe la configuración de un portafolio personal utilizando varios servicios de AWS. La infraestructura incluye los siguientes componentes: S3, CloudFront, Route 53, Certificados SSL, DynamoDB, API Gateway y Lambda.
+
 ![IMAGE PORTAFOLIOS](https://github.com/jpiedramacas/my-portafolios/blob/main/mapa_mental_portafolio.png)
 
 ## Servicios de AWS Utilizados
@@ -14,10 +15,10 @@ Amazon S3 se utiliza para el almacenamiento de los archivos estáticos del porta
 - **Acceso:** Integración fácil con otros servicios de AWS y control de acceso granular.
 
 ### 2. Amazon CloudFront
-CloudFront es una red de entrega de contenido (CDN) que se utiliza para distribuir el contenido del portafolio con baja latencia y altas velocidades de transferencia. Se mejora la experiencia del usuario al ofrecer contenido a través de una red global de servidores.
+CloudFront es una red de entrega de contenido (CDN) que se utiliza para distribuir el contenido del portafolio con baja latencia y altas velocidades de transferencia. Mejora la experiencia del usuario al ofrecer contenido a través de una red global de servidores.
 
 **Características clave:**
-- **Reducción de latencia:** El contenido se entrega desde el edge location más cercano al usuario.
+- **Reducción de latencia:** El contenido se entrega desde la ubicación más cercana al usuario.
 - **Seguridad:** Integración con AWS Shield para protección contra DDoS y con WAF para protección contra amenazas a nivel de aplicación.
 - **Escalabilidad automática:** Capacidad para manejar grandes volúmenes de tráfico.
 
@@ -72,4 +73,3 @@ El backend del portafolio está construido utilizando los siguientes servicios:
 1. **API Gateway:** Exponiendo endpoints RESTful que permiten la comunicación entre el frontend y el backend.
 2. **AWS Lambda:** Ejecutando funciones que manejan la lógica del negocio, como el procesamiento de datos de formularios, gestión de contenido dinámico y consultas a la base de datos.
 3. **DynamoDB:** Almacenando datos dinámicos como registros de visitantes, feedbacks y cualquier otro tipo de información que necesite ser persistida.
-
