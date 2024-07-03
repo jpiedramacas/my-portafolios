@@ -14,7 +14,7 @@ Amazon S3 se utiliza para el almacenamiento de los archivos estáticos del porta
 - **Escalabilidad:** Almacenamiento prácticamente ilimitado.
 - **Acceso:** Integración fácil con otros servicios de AWS y control de acceso granular.
 
-### 2. Amazon CloudFront
+### 2. `Amazon CloudFront`
 CloudFront es una red de entrega de contenido (CDN) que se utiliza para distribuir el contenido del portafolio con baja latencia y altas velocidades de transferencia. Mejora la experiencia del usuario al ofrecer contenido a través de una red global de servidores.
 
 **Características clave:**
@@ -22,7 +22,7 @@ CloudFront es una red de entrega de contenido (CDN) que se utiliza para distribu
 - **Seguridad:** Integración con AWS Shield para protección contra DDoS y con WAF para protección contra amenazas a nivel de aplicación.
 - **Escalabilidad automática:** Capacidad para manejar grandes volúmenes de tráfico.
 
-### 3. Amazon Route 53
+### 3. `Amazon Route 53`
 Route 53 es un servicio de DNS escalable y de alta disponibilidad que se utiliza para dirigir el tráfico a la infraestructura del portafolio. Se encarga de resolver el nombre de dominio del portafolio a la IP correspondiente.
 
 **Características clave:**
@@ -30,7 +30,7 @@ Route 53 es un servicio de DNS escalable y de alta disponibilidad que se utiliza
 - **Escalabilidad:** Manejo eficiente de grandes volúmenes de solicitudes de DNS.
 - **Integración con otros servicios de AWS:** Fácil configuración con CloudFront, S3, entre otros.
 
-### 4. AWS Certificate Manager (ACM)
+### 4. `AWS Certificate Manager (ACM)`
 ACM se utiliza para administrar los certificados SSL/TLS necesarios para asegurar el tráfico HTTPS hacia el portafolio. Garantiza que los datos transferidos entre el cliente y el servidor estén cifrados y seguros.
 
 **Características clave:**
@@ -38,7 +38,7 @@ ACM se utiliza para administrar los certificados SSL/TLS necesarios para asegura
 - **Integración con otros servicios de AWS:** Compatible con CloudFront, Elastic Load Balancing, y API Gateway.
 - **Seguridad:** Cifrado robusto para proteger la información.
 
-### 5. Amazon DynamoDB
+### 5. `Amazon DynamoDB`
 DynamoDB es una base de datos NoSQL totalmente gestionada, utilizada para almacenar datos dinámicos del portafolio, como registros de visitantes, feedbacks y cualquier otro dato que requiera un acceso rápido y de baja latencia.
 
 **Características clave:**
@@ -46,7 +46,7 @@ DynamoDB es una base de datos NoSQL totalmente gestionada, utilizada para almace
 - **Baja latencia:** Respuestas rápidas a cualquier escala.
 - **Alta disponibilidad:** Replicación automática en varias regiones.
 
-### 6. Amazon API Gateway
+### 6. `Amazon API Gateway`
 API Gateway se utiliza para crear, publicar, mantener, monitorear y asegurar APIs RESTful y WebSocket a cualquier escala. Permite la interacción entre el frontend del portafolio y las funciones Lambda que manejan la lógica del backend.
 
 **Características clave:**
@@ -54,7 +54,7 @@ API Gateway se utiliza para crear, publicar, mantener, monitorear y asegurar API
 - **Escalabilidad:** Manejo de miles de llamadas API concurrentes.
 - **Seguridad:** Integración con AWS IAM, Lambda authorizers y Amazon Cognito para la autenticación y autorización.
 
-### 7. AWS Lambda
+### 7. `AWS Lambda`
 Lambda se utiliza para ejecutar código en respuesta a eventos, como solicitudes HTTP a través de API Gateway, sin necesidad de administrar servidores. En el contexto del portafolio, Lambda puede manejar lógica de backend como procesamiento de formularios o interacción con DynamoDB.
 
 **Características clave:**
