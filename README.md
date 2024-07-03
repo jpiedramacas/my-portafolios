@@ -1,5 +1,5 @@
 
-## Paso 1: Configurar Amazon S3 (Simple Storage Service)
+## Paso 1: Crear un Bucket en Amazon S3
 
 ### Crear un Bucket en S3
 
@@ -50,7 +50,61 @@
 4. Reemplaza `mi-portafolio` con el nombre de tu bucket.
 5. Haz clic en **Save changes**.
 
-## Paso 2: Configurar Amazon CloudFront
+## Paso 2: Crear una Función AWS Lambda
+
+### Crear una Función Lambda
+
+1. En la consola de AWS, navega a **Lambda**.
+2. Haz clic en **Create function**.
+3. Selecciona **Author from scratch**.
+4. Introduce un nombre para tu función (por ejemplo, `VisitorHandler`).
+5. Selecciona un tiempo de ejecución compatible (por ejemplo, Node.js, Python).
+6. Haz clic en **Create function**.
+7. En el editor de código, agrega la lógica para manejar las solicitudes (por ejemplo, procesamiento de formularios).
+8. Configura los permisos necesarios para que Lambda pueda interactuar con DynamoDB y API Gateway.
+
+## Paso 3: Crear una API Gateway
+
+### Crear una API REST
+
+1. En la consola de AWS, navega a **API Gateway**.
+2. Haz clic en **Create API** y selecciona **REST API**.
+3. Selecciona **New API** y haz clic en **Create API**.
+4. Introduce un nombre para tu API (por ejemplo, `PortfolioAPI`).
+5. Haz clic en **Create Resource** y añade recursos según tus necesidades (por ejemplo, `/visitors`).
+6. Configura los métodos HTTP (GET, POST, etc.) y conecta cada método a la función Lambda creada en el paso anterior.
+
+### Conectar API Gateway con S3 y Lambda
+
+1. En tu API Gateway, navega a **Stages** y crea un nuevo stage (por ejemplo, `prod`).
+2. En el stage creado, selecciona **Deploy** para desplegar la API.
+3. En la configuración de la API, asegúrate de que las solicitudes GET de `/` estén configuradas para servir el contenido de S3, y las solicitudes POST estén configuradas para llamar a la función Lambda.
+
+## Paso 4: Configurar Amazon SNS y DynamoDB
+
+### Crear una Tabla DynamoDB
+
+1. En la consola de AWS, navega a **DynamoDB**.
+2. Haz clic en **Create table**.
+3. Introduce un nombre para tu tabla (por ejemplo, `VisitorLogs`).
+4. Define la clave principal (por ejemplo, `VisitorID` como tipo String).
+5. Haz clic en **Create table**.
+
+### Crear un Tópico SNS
+
+1. En la consola de AWS, navega a **SNS**.
+2. Haz clic en **Create topic**.
+3. Selecciona **Standard** y introduce un nombre para tu tópico (por ejemplo, `VisitorNotifications`).
+4. Haz clic en **Create topic**.
+
+### Conectar SNS y DynamoDB a Lambda
+
+1. En tu función Lambda, ve a la pestaña **Configuration** y selecciona **Triggers**.
+2. Haz clic en **Add trigger**.
+3. Selecciona **SNS** y configura el tópico creado anteriormente.
+4. Configura permisos adicionales en la política de IAM de tu función Lambda para permitir la interacción con DynamoDB.
+
+## Paso 5: Configurar Amazon CloudFront
 
 ### Crear una Distribución de CloudFront
 
@@ -61,20 +115,25 @@
 5. Configura otras opciones según tus necesidades, pero asegúrate de habilitar **Restrict Bucket Access** si deseas un mayor control sobre quién puede acceder a tu contenido.
 6. Haz clic en **Create Distribution**.
 
-### Configurar el CNAME (Opcional)
+### Conectar CloudFront a S3
 
-1. En la distribución de CloudFront que acabas de crear, ve a la pestaña **General**.
-2. En **Settings**, agrega un **Alternate Domain Name (CNAME)** si tienes un dominio personalizado.
-3. Configura un **SSL Certificate** si deseas usar HTTPS con tu dominio personalizado.
+1. En la distribución de CloudFront que acabas de crear, ve a la pestaña **Origins**.
+2. Configura las políticas de caché y comportamiento de la distribución para asegurar que el contenido estático de S3 se distribuya de manera eficiente.
+3. Asegúrate de que el nombre del bucket de S3 esté correctamente configurado como origen en CloudFront.
 
-## Paso 3: Configurar Amazon Route 53
+## Paso 6: Comprar un Dominio en Amazon Route 53
 
-### Crear una Zona de Hospedaje
+### Comprar un Dominio
 
 1. En la consola de AWS, navega a **Route 53**.
-2. Selecciona **Hosted zones** y haz clic en **Create hosted zone**.
-3. Introduce el nombre de tu dominio (por ejemplo, `miportafolio.com`).
-4. Haz clic en **Create hosted zone**.
+2. Selecciona **Registered domains** y haz clic en **Register Domain**.
+3. Introduce el nombre de dominio que deseas registrar (por ejemplo, `miportafolio.com`).
+4. Sigue los pasos para completar la compra del dominio.
+
+### Configurar una Zona de Hospedaje
+
+1. En Route 53, selecciona **Hosted zones** y haz clic en **Create hosted zone**.
+2. Introduce el nombre de tu dominio y haz clic en **Create hosted zone**.
 
 ### Configurar Registros DNS
 
@@ -90,42 +149,3 @@
 
 1. Actualiza los servidores de nombres (NS records) en tu registrador de dominio para que apunten a los servidores de nombres proporcionados por Route 53.
 
-## Paso 4: Configurar Amazon DynamoDB
-
-### Crear una Tabla DynamoDB
-
-1. En la consola de AWS, navega a **DynamoDB**.
-2. Haz clic en **Create table**.
-3. Introduce un nombre para tu tabla (por ejemplo, `VisitorLogs`).
-4. Define la clave principal (por ejemplo, `VisitorID` como tipo String).
-5. Haz clic en **Create table**.
-
-## Paso 5: Configurar Amazon API Gateway
-
-### Crear una API REST
-
-1. En la consola de AWS, navega a **API Gateway**.
-2. Haz clic en **Create API** y selecciona **REST API**.
-3. Selecciona **New API** y haz clic en **Create API**.
-4. Introduce un nombre para tu API (por ejemplo, `PortfolioAPI`).
-5. Haz clic en **Create Resource** y añade recursos según tus necesidades (por ejemplo, `/visitors`).
-6. Configura los métodos HTTP (GET, POST, etc.) y conecta cada método a una función Lambda.
-
-## Paso 6: Configurar AWS Lambda
-
-### Crear una Función Lambda
-
-1. En la consola de AWS, navega a **Lambda**.
-2. Haz clic en **Create function**.
-3. Selecciona **Author from scratch**.
-4. Introduce un nombre para tu función (por ejemplo, `VisitorHandler`).
-5. Selecciona un tiempo de ejecución compatible (por ejemplo, Node.js, Python).
-6. Haz clic en **Create function**.
-7. En el editor de código, agrega la lógica para manejar las solicitudes de tu API.
-8. Configura los permisos necesarios para que Lambda pueda interactuar con DynamoDB y API Gateway.
-
-### Configurar Trigger de API Gateway
-
-1. En tu función Lambda, ve a la pestaña **Configuration** y selecciona **Triggers**.
-2. Haz clic en **Add trigger**.
-3. Selecciona **API Gateway** y configura el endpoint de la API que has creado.
