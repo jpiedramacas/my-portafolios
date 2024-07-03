@@ -1,75 +1,134 @@
-# Creación de Portafolio Personal en AWS
+# Instrucciones para Configurar un Portafolio Personal en AWS Usando Free Tier
 
-Este proyecto describe la configuración de un portafolio personal utilizando varios servicios de AWS. La infraestructura incluye los siguientes componentes: S3, CloudFront, Route 53, Certificados SSL, DynamoDB, API Gateway y Lambda.
+Estas instrucciones te guiarán a través de los pasos necesarios para configurar un portafolio personal utilizando los servicios gratuitos de AWS. Asegúrate de que tu cuenta de AWS esté configurada y que tengas acceso a la consola de AWS.
 
-![IMAGE PORTAFOLIOS](https://github.com/jpiedramacas/my-portafolios/blob/main/mapa_mental_portafolio.png)
+## Paso 1: Configurar Amazon S3 (Simple Storage Service)
 
-## Servicios de AWS Utilizados
+### Crear un Bucket en S3
 
-### 1. `Amazon S3 (Simple Storage Service)`
-Amazon S3 se utiliza para el almacenamiento de los archivos estáticos del portafolio, como HTML, CSS, JavaScript e imágenes. S3 proporciona una solución de almacenamiento escalable y segura.
+1. Inicia sesión en la consola de AWS.
+2. Navega a **S3** en el menú de servicios.
+3. Haz clic en **Create bucket**.
+4. Introduce un nombre único para tu bucket (por ejemplo, `mi-portafolio`).
+5. Selecciona la región donde deseas crear el bucket.
+6. Haz clic en **Create bucket** al final de la página.
 
-**Características clave:**
-- **Durabilidad:** 99.999999999% de durabilidad garantizada para los objetos almacenados.
-- **Escalabilidad:** Almacenamiento prácticamente ilimitado.
-- **Acceso:** Integración fácil con otros servicios de AWS y control de acceso granular.
+### Subir Archivos Estáticos
 
-### 2. `Amazon CloudFront`
-CloudFront es una red de entrega de contenido (CDN) que se utiliza para distribuir el contenido del portafolio con baja latencia y altas velocidades de transferencia. Mejora la experiencia del usuario al ofrecer contenido a través de una red global de servidores.
+1. Haz clic en el bucket que acabas de crear.
+2. Selecciona la pestaña **Objects**.
+3. Haz clic en **Upload**.
+4. Arrastra y suelta tus archivos HTML, CSS y JavaScript, o selecciona **Add files**.
+5. Haz clic en **Upload** para subir los archivos.
 
-**Características clave:**
-- **Reducción de latencia:** El contenido se entrega desde la ubicación más cercana al usuario.
-- **Seguridad:** Integración con AWS Shield para protección contra DDoS y con WAF para protección contra amenazas a nivel de aplicación.
-- **Escalabilidad automática:** Capacidad para manejar grandes volúmenes de tráfico.
+### Configurar el Bucket como Sitio Web Estático
 
-### 3. `Amazon Route 53`
-Route 53 es un servicio de DNS escalable y de alta disponibilidad que se utiliza para dirigir el tráfico a la infraestructura del portafolio. Se encarga de resolver el nombre de dominio del portafolio a la IP correspondiente.
+1. En la configuración del bucket, selecciona **Properties**.
+2. Busca la sección **Static website hosting** y haz clic en **Edit**.
+3. Selecciona **Enable** y configura el **Index document** (por ejemplo, `index.html`).
+4. Opcionalmente, configura un documento de error (por ejemplo, `error.html`).
+5. Haz clic en **Save changes**.
 
-**Características clave:**
-- **Alta disponibilidad:** Operación en múltiples ubicaciones para garantizar resiliencia.
-- **Escalabilidad:** Manejo eficiente de grandes volúmenes de solicitudes de DNS.
-- **Integración con otros servicios de AWS:** Fácil configuración con CloudFront, S3, entre otros.
+### Configurar Permisos Públicos
 
-### 4. `AWS Certificate Manager (ACM)`
-ACM se utiliza para administrar los certificados SSL/TLS necesarios para asegurar el tráfico HTTPS hacia el portafolio. Garantiza que los datos transferidos entre el cliente y el servidor estén cifrados y seguros.
+1. Ve a la pestaña **Permissions**.
+2. En la sección **Bucket policy**, haz clic en **Edit**.
+3. Copia y pega la siguiente política para hacer que los archivos sean públicos:
 
-**Características clave:**
-- **Automatización:** Emisión, renovación y administración de certificados SSL/TLS sin intervención manual.
-- **Integración con otros servicios de AWS:** Compatible con CloudFront, Elastic Load Balancing, y API Gateway.
-- **Seguridad:** Cifrado robusto para proteger la información.
+    ```json
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "PublicReadGetObject",
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": "s3:GetObject",
+                "Resource": "arn:aws:s3:::mi-portafolio/*"
+            }
+        ]
+    }
+    ```
 
-### 5. `Amazon DynamoDB`
-DynamoDB es una base de datos NoSQL totalmente gestionada, utilizada para almacenar datos dinámicos del portafolio, como registros de visitantes, feedbacks y cualquier otro dato que requiera un acceso rápido y de baja latencia.
+4. Reemplaza `mi-portafolio` con el nombre de tu bucket.
+5. Haz clic en **Save changes**.
 
-**Características clave:**
-- **Escalabilidad:** Ajuste automático de capacidad según la carga de trabajo.
-- **Baja latencia:** Respuestas rápidas a cualquier escala.
-- **Alta disponibilidad:** Replicación automática en varias regiones.
+## Paso 2: Configurar Amazon CloudFront
 
-### 6. `Amazon API Gateway`
-API Gateway se utiliza para crear, publicar, mantener, monitorear y asegurar APIs RESTful y WebSocket a cualquier escala. Permite la interacción entre el frontend del portafolio y las funciones Lambda que manejan la lógica del backend.
+### Crear una Distribución de CloudFront
 
-**Características clave:**
-- **Desarrollo simplificado:** Facilita la creación y gestión de APIs.
-- **Escalabilidad:** Manejo de miles de llamadas API concurrentes.
-- **Seguridad:** Integración con AWS IAM, Lambda authorizers y Amazon Cognito para la autenticación y autorización.
+1. En la consola de AWS, navega a **CloudFront**.
+2. Haz clic en **Create Distribution**.
+3. Selecciona **Web** y haz clic en **Get Started**.
+4. En **Origin Domain Name**, selecciona tu bucket de S3 desde el menú desplegable.
+5. Configura otras opciones según tus necesidades, pero asegúrate de habilitar **Restrict Bucket Access** si deseas un mayor control sobre quién puede acceder a tu contenido.
+6. Haz clic en **Create Distribution**.
 
-### 7. `AWS Lambda`
-Lambda se utiliza para ejecutar código en respuesta a eventos, como solicitudes HTTP a través de API Gateway, sin necesidad de administrar servidores. En el contexto del portafolio, Lambda puede manejar lógica de backend como procesamiento de formularios o interacción con DynamoDB.
+### Configurar el CNAME (Opcional)
 
-**Características clave:**
-- **Ejecución bajo demanda:** Solo se paga por el tiempo de cómputo consumido.
-- **Escalabilidad automática:** Capacidad para manejar desde unos pocos hasta miles de solicitudes simultáneas.
-- **Integración con otros servicios de AWS:** Interoperabilidad con S3, DynamoDB, CloudWatch, y más.
+1. En la distribución de CloudFront que acabas de crear, ve a la pestaña **General**.
+2. En **Settings**, agrega un **Alternate Domain Name (CNAME)** si tienes un dominio personalizado.
+3. Configura un **SSL Certificate** si deseas usar HTTPS con tu dominio personalizado.
 
-## Arquitectura del Portafolio
+## Paso 3: Configurar Amazon Route 53
 
-### Frontend
-El frontend del portafolio está compuesto por archivos HTML, CSS y JavaScript alojados en Amazon S3. Estos archivos estáticos son distribuidos a través de Amazon CloudFront para asegurar una entrega rápida y eficiente a nivel global. El contenido del frontend puede incluir páginas de presentación, galerías de proyectos, formularios de contacto y cualquier otra información relevante.
+### Crear una Zona de Hospedaje
 
-### Backend
-El backend del portafolio está construido utilizando los siguientes servicios:
+1. En la consola de AWS, navega a **Route 53**.
+2. Selecciona **Hosted zones** y haz clic en **Create hosted zone**.
+3. Introduce el nombre de tu dominio (por ejemplo, `miportafolio.com`).
+4. Haz clic en **Create hosted zone**.
 
-1. **API Gateway:** Exponiendo endpoints RESTful que permiten la comunicación entre el frontend y el backend.
-2. **AWS Lambda:** Ejecutando funciones que manejan la lógica del negocio, como el procesamiento de datos de formularios, gestión de contenido dinámico y consultas a la base de datos.
-3. **DynamoDB:** Almacenando datos dinámicos como registros de visitantes, feedbacks y cualquier otro tipo de información que necesite ser persistida.
+### Configurar Registros DNS
+
+1. En tu zona de hospedaje, haz clic en **Create record**.
+2. Crea un registro A para tu dominio raíz:
+    - **Record type:** A - IPv4 address
+    - **Alias:** Yes
+    - **Alias Target:** Selecciona tu distribución de CloudFront
+    - Haz clic en **Create records**.
+3. Repite el proceso para crear un registro CNAME para `www` si es necesario.
+
+### Configurar el Dominio
+
+1. Actualiza los servidores de nombres (NS records) en tu registrador de dominio para que apunten a los servidores de nombres proporcionados por Route 53.
+
+## Paso 4: Configurar Amazon DynamoDB
+
+### Crear una Tabla DynamoDB
+
+1. En la consola de AWS, navega a **DynamoDB**.
+2. Haz clic en **Create table**.
+3. Introduce un nombre para tu tabla (por ejemplo, `VisitorLogs`).
+4. Define la clave principal (por ejemplo, `VisitorID` como tipo String).
+5. Haz clic en **Create table**.
+
+## Paso 5: Configurar Amazon API Gateway
+
+### Crear una API REST
+
+1. En la consola de AWS, navega a **API Gateway**.
+2. Haz clic en **Create API** y selecciona **REST API**.
+3. Selecciona **New API** y haz clic en **Create API**.
+4. Introduce un nombre para tu API (por ejemplo, `PortfolioAPI`).
+5. Haz clic en **Create Resource** y añade recursos según tus necesidades (por ejemplo, `/visitors`).
+6. Configura los métodos HTTP (GET, POST, etc.) y conecta cada método a una función Lambda.
+
+## Paso 6: Configurar AWS Lambda
+
+### Crear una Función Lambda
+
+1. En la consola de AWS, navega a **Lambda**.
+2. Haz clic en **Create function**.
+3. Selecciona **Author from scratch**.
+4. Introduce un nombre para tu función (por ejemplo, `VisitorHandler`).
+5. Selecciona un tiempo de ejecución compatible (por ejemplo, Node.js, Python).
+6. Haz clic en **Create function**.
+7. En el editor de código, agrega la lógica para manejar las solicitudes de tu API.
+8. Configura los permisos necesarios para que Lambda pueda interactuar con DynamoDB y API Gateway.
+
+### Configurar Trigger de API Gateway
+
+1. En tu función Lambda, ve a la pestaña **Configuration** y selecciona **Triggers**.
+2. Haz clic en **Add trigger**.
+3. Selecciona **API Gateway** y configura el endpoint de la API que has creado.
